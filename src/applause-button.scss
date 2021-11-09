@@ -85,7 +85,7 @@ applause-button {
   }
   .count-hidden {
     opacity: 0 !important;
-    transition: all 0.5s ease;
+    transition: all 1s ease;
   }
   .count-container {
     position: absolute;
@@ -101,6 +101,7 @@ applause-button {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: Helvetica;
     .count {
       font-size: 0.9rem;
       text-align: center;
@@ -114,6 +115,7 @@ applause-button {
     color: gray;
     user-select: none;
     opacity: 1;
+    font-family: Helvetica;
     .total-count {
       font-size: 0.9rem;
       text-align: center;

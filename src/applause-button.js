@@ -57,7 +57,7 @@ class HTMLCustomElement extends HTMLElement {
   init() {}
 }
 
-const MAX_MULTI_CLAP = 1000;
+const MAX_MULTI_CLAP = 50;
 
 class ApplauseButton extends HTMLCustomElement {
   connectedCallback() {
@@ -141,7 +141,7 @@ class ApplauseButton extends HTMLCustomElement {
             //this.totalCountElement.innerHTML = updatedClapCount;
           }
           this._cachedClapCount = updatedClapCount;
-
+          this.totalCountContainer.classList.remove("count-hidden");
           this._totalClaps += increment;
           this._bufferedClaps = 0;
         });
@@ -155,7 +155,7 @@ class ApplauseButton extends HTMLCustomElement {
 
       this.classList.add("clapped");
       if (this.classList.contains("clap-limit-exceeded")) {
-        this.countContainer.add("count-hidden");
+        //this.countContainer.add("count-hidden");
         return;
       }
 
@@ -184,9 +184,10 @@ class ApplauseButton extends HTMLCustomElement {
       setTimeout(() => {
         this._countElement.innerHTML = formatClaps(this._bufferedClaps);
         setTimeout(() => {
-          this.totalCountElement.innerHTML = clapCount;
           this.countContainer.classList.add("count-hidden");
-          this.totalCountContainer.classList.remove("count-hidden");
+          setTimeout(() => {
+            this.totalCountElement.innerHTML = clapCount;
+          }, 500);
         }, 1000);
       }, 250);
 
