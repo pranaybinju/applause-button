@@ -23,6 +23,9 @@
 applause-button {
   position: relative;
   cursor: pointer;
+  background-image: url("https://assets-global.website-files.com/5e469aaf314e562ff1146d3f/601153608785fef5a88d32ca_heart-empty.svg");
+  background-repeat: no-repeat;
+  background-position: left;
 
   .style-root {
     @include position-fill();
@@ -83,34 +86,31 @@ applause-button {
       }
     }
   }
-  .count-hidden {
-    opacity: 0 !important;
-    transition: all 1s ease;
+
+  .style-root:after {
+    border: none !important;
   }
+  .shockwave,
+  svg {
+    display: none;
+  }
+
+  // .count-hidden {
+  //   opacity: 0 !important;
+  //   transition: all 1s ease;
+  // }
   .count-container {
-    position: absolute;
-    top: -60%;
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    color: white;
-    user-select: none;
-    background-color: black;
-    opacity: 1;
-    left: 25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Helvetica;
+    display: none;
     .count {
-      font-size: 0.9rem;
-      text-align: center;
+      display: none;
     }
   }
 
   .total-count-container {
     position: absolute;
-    bottom: -40%;
+    left: 10px;
+    top: 19px;
+
     width: 100%;
     color: gray;
     user-select: none;
@@ -153,10 +153,10 @@ applause-button {
     }
 
     @include animate-once(pulse);
+  }
 
-    .count {
-      @include animate-once(hideThenShow);
-    }
+  &.clap {
+    background-image: url("https://assets-global.website-files.com/5e469aaf314e562ff1146d3f/601153601bab950a9703c70f_heart-fill.svg");
   }
 }
 
