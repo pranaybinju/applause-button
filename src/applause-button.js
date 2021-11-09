@@ -7,27 +7,27 @@ const getClaps = (api, url) =>
   // TODO: polyfill for IE (not edge)
   fetch(`${api}/get-claps` + (url ? `?url=${url}` : ""), {
     headers: {
-      "Content-Type": "text/plain"
-    }
+      "Content-Type": "text/plain",
+    },
   })
-    .then(response => response.text())
-    .then(res => Number(res));
+    .then((response) => response.text())
+    .then((res) => Number(res));
 
 const updateClaps = (api, claps, url) =>
   // TODO: polyfill for IE (not edge)
   fetch(`${api}/update-claps` + (url ? `?url=${url}` : ""), {
     method: "POST",
     headers: {
-      "Content-Type": "text/plain"
+      "Content-Type": "text/plain",
     },
-    body: JSON.stringify(`${claps},${VERSION}`)
+    body: JSON.stringify(`${claps},${VERSION}`),
   })
-    .then(response => response.text())
-    .then(res => Number(res));
+    .then((response) => response.text())
+    .then((res) => Number(res));
 
-const arrayOfSize = size => new Array(size).fill(undefined);
+const arrayOfSize = (size) => new Array(size).fill(undefined);
 
-const formatClaps = claps => claps.toLocaleString("en");
+const formatClaps = (claps) => `+${claps.toLocaleString("en")}`;
 
 // toggle a CSS class to re-trigger animations
 const toggleClass = (element, cls) => {
@@ -57,7 +57,7 @@ class HTMLCustomElement extends HTMLElement {
   init() {}
 }
 
-const MAX_MULTI_CLAP = 10;
+const MAX_MULTI_CLAP = 1000;
 
 class ApplauseButton extends HTMLCustomElement {
   connectedCallback() {
@@ -72,7 +72,7 @@ class ApplauseButton extends HTMLCustomElement {
     this.innerHTML = `
       <div class="style-root">
         <div class="shockwave"></div>
-        <div class="count-container">
+        <div class="count-container count-hidden">
           <div class="count"></div>
         </div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
@@ -88,15 +88,23 @@ class ApplauseButton extends HTMLCustomElement {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 20 20">
           <g class="sparkle">
           ${arrayOfSize(5)
-            .map(s => `<g><circle cx="0" cy="0" r="1"/></g>`)
+            .map((s) => `<g><circle cx="0" cy="0" r="1"/></g>`)
             .join("")}
           </g>
         </svg>
+        <div class="total-count-container">
+          <div class="total-count"></div>
+        </div>
       </div>
       `;
 
     this._styleRootElement = this.querySelector(".style-root");
     this._countElement = this.querySelector(".count");
+    this.totalCountElement = this.querySelector(".total-count");
+
+    this.countContainer = this.querySelector(".count-container");
+    this.totalCountContainer = this.querySelector(".total-count-container");
+
     this._updateRootColor();
     // the number of claps that this user has made - this is limited
     // by the MAX_MULTI_CLAP property, and whether multiclap is enabled
@@ -105,7 +113,7 @@ class ApplauseButton extends HTMLCustomElement {
     // return the initial clap count as a promise
     let initialClapCountResolve;
     this._initialClapCount = new Promise(
-      resolve => (initialClapCountResolve = resolve)
+      (resolve) => (initialClapCountResolve = resolve)
     );
 
     // cache the most recent clap count returned from the server. If, after an update, the clap count
@@ -123,12 +131,14 @@ class ApplauseButton extends HTMLCustomElement {
         );
         // send the updated clap count - checking the response to see if the server-held
         // clap count has actually incremented
-        updateClaps(this.api, increment, this.url).then(updatedClapCount => {
+
+        updateClaps(this.api, increment, this.url).then((updatedClapCount) => {
           if (updatedClapCount === this._cachedClapCount) {
             // if the clap number as not incremented, disable further updates
             this.classList.add("clap-limit-exceeded");
             // and reset the counter
-            this._countElement.innerHTML = formatClaps(updatedClapCount);
+            this._countElement.innerHTML = formatClaps(this._bufferedClaps);
+            //this.totalCountElement.innerHTML = updatedClapCount;
           }
           this._cachedClapCount = updatedClapCount;
 
@@ -138,25 +148,26 @@ class ApplauseButton extends HTMLCustomElement {
       }
     }, 2000);
 
-    this.addEventListener("mousedown", event => {
+    this.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
         return;
       }
 
       this.classList.add("clapped");
       if (this.classList.contains("clap-limit-exceeded")) {
+        this.countContainer.add("count-hidden");
         return;
       }
 
       // fire a DOM event with the updated count
       const clapCount =
-        Number(this._countElement.innerHTML.replace(",", "")) + 1;
+        Number(this.totalCountElement.innerHTML.replace(",", "")) + 1;
       this.dispatchEvent(
         new CustomEvent("clapped", {
           bubbles: true,
           detail: {
-            clapCount
-          }
+            clapCount,
+          },
         })
       );
 
@@ -166,10 +177,17 @@ class ApplauseButton extends HTMLCustomElement {
       // buffer the increased count and defer the update
       this._bufferedClaps++;
       this._updateClaps();
+      this.countContainer.classList.remove("count-hidden");
+      this.totalCountContainer.classList.add("count-hidden");
 
       // increment the clap count after a small pause (to allow the animation to run)
       setTimeout(() => {
-        this._countElement.innerHTML = formatClaps(clapCount);
+        this._countElement.innerHTML = formatClaps(this._bufferedClaps);
+        setTimeout(() => {
+          this.totalCountElement.innerHTML = clapCount;
+          this.countContainer.classList.add("count-hidden");
+          this.totalCountContainer.classList.remove("count-hidden");
+        }, 1000);
       }, 250);
 
       // check whether we've exceeded the max claps
@@ -182,12 +200,12 @@ class ApplauseButton extends HTMLCustomElement {
       }
     });
 
-    getClaps(this.api, this.url).then(clapCount => {
+    getClaps(this.api, this.url).then((clapCount) => {
       this.classList.remove("loading");
       this._cachedClapCount = clapCount;
       initialClapCountResolve(clapCount);
       if (clapCount > 0) {
-        this._countElement.innerHTML = formatClaps(clapCount);
+        this.totalCountElement.innerHTML = clapCount;
       }
     });
 

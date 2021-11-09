@@ -68,11 +68,9 @@ applause-button {
   &.clap-limit-exceeded {
     cursor: inherit;
     div {
-      fill: gray !important;
-      stroke: gray !important;
-      color: gray !important;
+      fill: rgb(0, 128, 0) !important;
+      stroke: rgb(0, 128, 0) !important;
     }
-
   }
 
   &.clapped {
@@ -85,15 +83,39 @@ applause-button {
       }
     }
   }
-
+  .count-hidden {
+    opacity: 0 !important;
+    transition: all 0.5s ease;
+  }
   .count-container {
     position: absolute;
-    top: -40%;
+    top: -60%;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    color: white;
+    user-select: none;
+    background-color: black;
+    opacity: 1;
+    left: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .count {
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  }
+
+  .total-count-container {
+    position: absolute;
+    bottom: -40%;
     width: 100%;
     color: gray;
     user-select: none;
-
-    .count {
+    opacity: 1;
+    .total-count {
+      font-size: 0.9rem;
       text-align: center;
     }
   }
