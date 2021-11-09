@@ -281,7 +281,7 @@ class ApplauseButton extends HTMLCustomElement {
     if (!this._styleRootElement) {
       return;
     }
-    const rootColor = this.getAttribute("color") || "green";
+    const rootColor = this.getAttribute("color") || "rgb(51, 153, 51)";
     const style = this._styleRootElement.style;
     style.fill = rootColor;
     style.stroke = rootColor;
