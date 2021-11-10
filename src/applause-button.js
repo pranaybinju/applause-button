@@ -129,13 +129,14 @@ class ApplauseButton extends HTMLCustomElement {
           this._bufferedClaps,
           MAX_MULTI_CLAP - this._totalClaps
         );
+
         // send the updated clap count - checking the response to see if the server-held
         // clap count has actually incremented
 
         updateClaps(this.api, increment, this.url).then((updatedClapCount) => {
           if (updatedClapCount === this._cachedClapCount) {
             // if the clap number as not incremented, disable further updates
-            this.classList.add("clap-limit-exceeded");
+            // this.classList.add("clap-limit-exceeded");
             // and reset the counter
             this._countElement.innerHTML = formatClaps(this._bufferedClaps);
             //this.totalCountElement.innerHTML = updatedClapCount;
@@ -154,14 +155,17 @@ class ApplauseButton extends HTMLCustomElement {
       }
 
       this.classList.add("clapped");
-      if (this.classList.contains("clap-limit-exceeded")) {
-        //this.countContainer.add("count-hidden");
-        return;
-      }
+      // if (this.classList.contains("clap-limit-exceeded")) {
+      //   //this.countContainer.add("count-hidden");
+      //   return;
+      // }
 
       // fire a DOM event with the updated count
+
       const clapCount =
-        Number(this.totalCountElement.innerHTML.replace(",", "")) + 1;
+        parseInt(this.totalCountElement.innerHTML) === this._cachedClapCount
+          ? Number(this.totalCountElement.innerHTML.replace(",", ""))
+          : Number(this.totalCountElement.innerHTML.replace(",", "")) + 1;
       this.dispatchEvent(
         new CustomEvent("clapped", {
           bubbles: true,
@@ -175,7 +179,10 @@ class ApplauseButton extends HTMLCustomElement {
       toggleClass(this, "clap");
 
       // buffer the increased count and defer the update
-      this._bufferedClaps++;
+      this._bufferedClaps =
+        parseInt(this.totalCountElement.innerHTML) === this._cachedClapCount
+          ? MAX_MULTI_CLAP
+          : this._bufferedClaps + 1;
       this._updateClaps();
       this.countContainer.classList.remove("count-hidden");
       this.totalCountContainer.classList.add("count-hidden");
@@ -187,6 +194,7 @@ class ApplauseButton extends HTMLCustomElement {
           this.countContainer.classList.add("count-hidden");
           setTimeout(() => {
             this.totalCountElement.innerHTML = clapCount;
+            this.totalCountContainer.classList.remove("count-hidden");
           }, 500);
         }, 1000);
       }, 250);
