@@ -11,16 +11,16 @@ export default {
         [
           "env",
           {
-            modules: false
-          }
-        ]
+            modules: false,
+          },
+        ],
       ],
-      plugins: ["external-helpers"]
+      plugins: ["external-helpers"],
     }),
-    uglify()
+    uglify(),
   ],
   output: {
     file: "dist/applause-button.js",
-    format: "umd"
-  }
+    format: "umd",
+  },
 };
