@@ -23,9 +23,6 @@
 applause-button {
   position: relative;
   cursor: pointer;
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDIwIDIwIiBmaWxsPSJub25lIj4KPHBhdGggZD0iTTkuMTkxMzcgNC4yMzEyMkw5Ljk5OTY5IDUuMzQxMjdMMTAuODA4MSA0LjIzMTI3QzExLjYzNTQgMy4wOTUyNiAxMi45NjY1IDIuMzU5MzggMTQuNDY5NiAyLjM1OTM4QzE2Ljk3MTYgMi4zNTkzOCAxOSA0LjM4Nzk3IDE5IDYuODg5MjJDMTkgNy44NDQyIDE4LjUxNDMgOS4wMDIwOCAxNy42MTg0IDEwLjI4MDhDMTYuNzM4MSAxMS41Mzc0IDE1LjU0NSAxMi43OTM4IDE0LjMyMTcgMTMuOTIyNUMxMy4xMDMxIDE1LjA0NjkgMTEuODgwMyAxNi4wMjEyIDEwLjk2IDE2LjcxNTVDMTAuNTc0OSAxNy4wMDYxIDEwLjI0NDEgMTcuMjQ2NiA5Ljk5MDQxIDE3LjQyNzVDOS43MzgxNiAxNy4yNTMxIDkuNDEwMzQgMTcuMDIxNyA5LjAyOTE5IDE2Ljc0MThDOC4xMTAzMiAxNi4wNjcgNi44ODk2MyAxNS4xMTY0IDUuNjczMTkgMTQuMDA4NkM0LjQ1MjI0IDEyLjg5NjggMy4yNjE5IDExLjY1MDIgMi4zODM3NSAxMC4zODZDMS40OTM0NyA5LjEwNDM4IDEgNy45MTI4OCAxIDYuODg5MTdDMSA1LjIxNzE0IDEuNTM2MzEgNC4xMjQwNCAyLjI5MTQ2IDMuNDM5NDdDMy4wNjMxOCAyLjczOTg4IDQuMTgyODcgMi4zNTkzOCA1LjUyOTgzIDIuMzU5MzhDNy4wMzMzOSAyLjM1OTM4IDguMzY0MTcgMy4wOTUyNSA5LjE5MTM3IDQuMjMxMjJaIiBzdHJva2U9IiNGRDVGNjEiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4=");
-  background-repeat: no-repeat;
-  background-position: left;
 
   .style-root {
     @include position-fill();
@@ -59,31 +56,18 @@ applause-button {
     // annoyingly bootstrap has a higher precedence rule that sets overflow to hidden
     // hence the bang-important
     overflow: visible !important;
-
-    g.flat {
-      visibility: hidden;
-    }
-    g.outline {
-      visibility: visible;
-    }
   }
 
   &.clap-limit-exceeded {
     cursor: pointer;
     div {
-      fill: #fc5203 !important;
-      stroke: #fc5203 !important;
+      fill: #fc5203;
+      stroke: #fc5203;
     }
   }
 
   &.clapped {
     svg {
-      g.flat {
-        visibility: visible;
-      }
-      g.outline {
-        visibility: hidden;
-      }
     }
   }
 
@@ -93,7 +77,6 @@ applause-button {
   .shockwave,
   & svg g.flat,
   & svg g.outline {
-    display: none;
   }
 
   // .count-hidden {
@@ -158,7 +141,6 @@ applause-button {
   }
 
   &.clap {
-    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDIwIDIwIiBmaWxsPSJub25lIj4KPHBhdGggZD0iTTE0LjQ2OTYgMS4zNTkzOEMxNy41MjM4IDEuMzU5MzggMjAgMy44MzU2MyAyMCA2Ljg4OTIyQzIwIDExLjkzNjUgOS45OTk3NSAxOC42NDAxIDkuOTk5NzUgMTguNjQwMUM5Ljk5OTc1IDE4LjY0MDEgMCAxMi4xNzgxIDAgNi44ODkxN0MwIDMuMDg3MzQgMi40NzYyNSAxLjM1OTM4IDUuNTI5ODMgMS4zNTkzOEM3LjM2OTIyIDEuMzU5MzggOC45OTQwMyAyLjI2MTQ0IDkuOTk5NzUgMy42NDI1NkMxMS4wMDU2IDIuMjYxNDQgMTIuNjMwNyAxLjM1OTM4IDE0LjQ2OTYgMS4zNTkzOFoiIGZpbGw9IiNGRDVGNjEiLz4KPC9zdmc+");
   }
 }
 
