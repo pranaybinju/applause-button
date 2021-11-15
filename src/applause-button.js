@@ -146,7 +146,6 @@ class ApplauseButton extends HTMLCustomElement {
           this.totalCountContainer.classList.remove("count-hidden");
           this._totalClaps += increment;
           this._bufferedClaps = 0;
-          localStorage.setItem(`blog-liked-${window.location.href}`, "true");
         });
       }
     }, 2000);
@@ -161,13 +160,17 @@ class ApplauseButton extends HTMLCustomElement {
       //   //this.countContainer.add("count-hidden");
       //   return;
       // }
-      console.log(this._cachedClapCount);
-      console.log(Number(this.totalCountContainer));
+
       // fire a DOM event with the updated count
-      const clapCount =
-        parseInt(this.totalCountElement.innerHTML) === this._cachedClapCount
-          ? parseInt(this.totalCountElement.innerHTML)
-          : Number(this.totalCountElement.innerHTML.replace(",", "")) + 1;
+      const clapCount = localStorage.getItem(
+        `blog-liked-${window.location.href}`
+      )
+        ? this._cachedClapCount
+          ? this._cachedClapCount
+          : 1
+        : this._cachedClapCount + 1;
+
+      localStorage.setItem(`blog-liked-${window.location.href}`, "true");
       this.dispatchEvent(
         new CustomEvent("clapped", {
           bubbles: true,
