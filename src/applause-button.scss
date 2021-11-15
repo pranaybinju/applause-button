@@ -68,6 +68,12 @@ applause-button {
 
   &.clapped {
     svg {
+      g.flat {
+        visibility: visible;
+      }
+      g.outline {
+        visibility: hidden;
+      }
     }
   }
 
