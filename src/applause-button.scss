@@ -56,6 +56,12 @@ applause-button {
     // annoyingly bootstrap has a higher precedence rule that sets overflow to hidden
     // hence the bang-important
     overflow: visible !important;
+    g.flat {
+      visibility: hidden;
+    }
+    g.outline {
+      visibility: visible;
+    }
   }
 
   &.clap-limit-exceeded {
@@ -80,15 +86,14 @@ applause-button {
   .style-root:after {
     border: none !important;
   }
-  .shockwave,
-  & svg g.flat,
-  & svg g.outline {
+  .shockwave {
+    display: none;
   }
 
-  // .count-hidden {
-  //   opacity: 0 !important;
-  //   transition: all 1s ease;
-  // }
+  .count-hidden {
+    opacity: 0 !important;
+    transition: all 0.5s ease;
+  }
   .count-container {
     display: none;
     .count {
@@ -98,7 +103,7 @@ applause-button {
 
   .total-count-container {
     position: absolute;
-    left: 20px;
+    left: 40px;
     top: 19px;
     color: #000;
     width: 100%;
@@ -106,7 +111,7 @@ applause-button {
     opacity: 1;
     font-family: Helvetica;
     .total-count {
-      font-size: 1rem;
+      font-size: 1.2rem;
       text-align: center;
     }
   }

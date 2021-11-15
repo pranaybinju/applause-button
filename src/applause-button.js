@@ -77,7 +77,7 @@ class ApplauseButton extends HTMLCustomElement {
         </div>
 
        
-        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 60 60">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px"  viewBox="10 0 40 40">
         <g class="flat">
         <path d="m55.1 5.4c-6.3-6.3-16.6-6.3-23 0l-1.8 1.8-1.8-1.8c-6.2-6.5-16.4-6.8-23-.7s-6.8 16.4-.7 23c.2.2.4.5.7.7l23.7 23.7c.3.3.7.4 1.1.4s.8-.1 1-.4l23.7-23.7c6.4-6.3 6.4-16.6.1-23z"></path>
         </g>
