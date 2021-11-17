@@ -66,10 +66,6 @@ applause-button {
 
   &.clap-limit-exceeded {
     cursor: pointer;
-    div {
-      fill: #fc5203;
-      stroke: #fc5203;
-    }
   }
 
   &.clapped {
