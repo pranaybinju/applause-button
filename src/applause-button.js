@@ -111,7 +111,7 @@ class ApplauseButton extends HTMLCustomElement {
     // the number of claps that this user has made - this is limited
     // by the MAX_MULTI_CLAP property, and whether multiclap is enabled
     this._totalClaps = 0;
-
+    this.currentClap = 0;
     // return the initial clap count as a promise
     let initialClapCountResolve;
     this._initialClapCount = new Promise(
@@ -133,7 +133,14 @@ class ApplauseButton extends HTMLCustomElement {
         );
         // send the updated clap count - checking the response to see if the server-held
         // clap count has actually incremented
-
+        if (localStorage.getItem(`blog-claps-${window.location.href}`)) {
+          localStorage.setItem(
+            `blog-claps-${window.location.href}`,
+            this.currentClap
+          );
+          this.totalCountContainer.classList.remove("count-hidden");
+          return;
+        }
         updateClaps(this.api, increment, this.url).then((updatedClapCount) => {
           if (updatedClapCount === this._cachedClapCount) {
             // if the clap number as not incremented, disable further updates
@@ -142,19 +149,21 @@ class ApplauseButton extends HTMLCustomElement {
             this._countElement.innerHTML = formatClaps(this._bufferedClaps);
             //this.totalCountElement.innerHTML = updatedClapCount;
           }
+          localStorage.setItem(`blog-claps-${window.location.href}`, increment);
+
           this._cachedClapCount = updatedClapCount;
           this.totalCountContainer.classList.remove("count-hidden");
           this._totalClaps += increment;
-          this._bufferedClaps = 0;
+          //this._bufferedClaps = 0;
         });
       }
-    }, 2000);
+    }, 800);
 
     this.addEventListener("mousedown", (event) => {
       if (event.button !== 0) {
         return;
       }
-
+      localStorage.setItem(`blog-liked-${window.location.href}`, "true");
       this.classList.add("clapped");
       // if (this.classList.contains("clap-limit-exceeded")) {
       //   //this.countContainer.add("count-hidden");
@@ -162,15 +171,17 @@ class ApplauseButton extends HTMLCustomElement {
       // }
 
       // fire a DOM event with the updated count
-      const clapCount = localStorage.getItem(
-        `blog-liked-${window.location.href}`
-      )
-        ? this._cachedClapCount
-          ? this._cachedClapCount
-          : 1
-        : this._cachedClapCount + 1;
+      // const clapCount = localStorage.getItem(
+      //   `blog-liked-${window.location.href}`
+      // )
+      //   ? this._cachedClapCount
+      //     ? this._cachedClapCount
+      //     : 1
+      //   : this._cachedClapCount + 1;
 
-      localStorage.setItem(`blog-liked-${window.location.href}`, "true");
+      this.currentClap++;
+      const clapCount = this.currentClap;
+      console.log("clapCount", clapCount);
       this.dispatchEvent(
         new CustomEvent("clapped", {
           bubbles: true,
@@ -184,19 +195,18 @@ class ApplauseButton extends HTMLCustomElement {
       toggleClass(this, "clap");
 
       // buffer the increased count and defer the update
-      this._bufferedClaps++;
+      this._bufferedClaps = Math.min(MAX_MULTI_CLAP, this._bufferedClaps + 1);
       this._updateClaps();
       this.countContainer.classList.remove("count-hidden");
-      this.totalCountContainer.classList.add("count-hidden");
+      //this.totalCountContainer.classList.add("count-hidden");
 
       // increment the clap count after a small pause (to allow the animation to run)
       setTimeout(() => {
+        this.totalCountElement.innerHTML = clapCount;
+
         this._countElement.innerHTML = formatClaps(this._bufferedClaps);
         setTimeout(() => {
           this.countContainer.classList.add("count-hidden");
-          setTimeout(() => {
-            this.totalCountElement.innerHTML = clapCount;
-          }, 500);
         }, 1000);
       }, 250);
 
@@ -213,17 +223,30 @@ class ApplauseButton extends HTMLCustomElement {
     getClaps(this.api, this.url).then((clapCount) => {
       this.classList.remove("loading");
       this._cachedClapCount = clapCount;
+      this.currentClap = localStorage.getItem(
+        `blog-claps-${window.location.href}`
+      )
+        ? localStorage.getItem(`blog-claps-${window.location.href}`)
+        : this._cachedClapCount;
       initialClapCountResolve(clapCount);
       var isLiked = localStorage.getItem(`blog-liked-${window.location.href}`);
 
       if (isLiked) {
         this.classList.add("clapped");
         this.classList.add("clap");
-        this.totalCountElement.innerHTML = clapCount;
+        this.totalCountElement.innerHTML = localStorage.getItem(
+          `blog-claps-${window.location.href}`
+        )
+          ? localStorage.getItem(`blog-claps-${window.location.href}`)
+          : clapCount;
         return;
       }
       if (clapCount > 0) {
-        this.totalCountElement.innerHTML = clapCount;
+        this.totalCountElement.innerHTML = localStorage.getItem(
+          `blog-claps-${window.location.href}`
+        )
+          ? localStorage.getItem(`blog-claps-${window.location.href}`)
+          : clapCount;
       }
     });
 
