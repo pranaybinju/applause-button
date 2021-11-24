@@ -16,14 +16,14 @@ const getClaps = (api, url) =>
 const updateClaps = (api, claps, url) => {
   console.log("hrer");
   return fetch(
-    `https://71ff-1-186-127-184.ngrok.io/appreceation/postAppreceation` +
+    `http://fc3c-1-186-127-184.ngrok.io/appreceation/postAppreceation` +
       (url ? `?url=${url}` : ""),
     {
       method: "POST",
       headers: {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(`${claps}`),
+      body: JSON.stringify({ claps }),
     }
   )
     .then((response) => response.text())
@@ -63,7 +63,7 @@ class HTMLCustomElement extends HTMLElement {
   init() {}
 }
 
-const MAX_MULTI_CLAP = 50;
+const MAX_MULTI_CLAP = 10;
 
 class ApplauseButton extends HTMLCustomElement {
   connectedCallback() {
@@ -141,11 +141,41 @@ class ApplauseButton extends HTMLCustomElement {
         );
         // send the updated clap count - checking the response to see if the server-held
         // clap count has actually incremented
-        if (localStorage.getItem(`blog-claps-${window.location.href}`)) {
+        console.log("_bufferedClaps", this._bufferedClaps);
+        console.log(
+          " MAX_MULTI_CLAP - this._totalClaps",
+          MAX_MULTI_CLAP - this._totalClaps
+        );
+        console.log("increment", increment);
+        if (increment === 0) {
+          localStorage.setItem(
+            `blog-max-claps-${window.location.href}`,
+            MAX_MULTI_CLAP
+          );
+        } else {
+          localStorage.setItem(
+            `blog-max-claps-${window.location.href}`,
+            this._bufferedClaps
+          );
+        }
+        console.log("MAX_MULTI_CLAP", MAX_MULTI_CLAP);
+        console.log("increment", increment);
+        //localStorage.setItem(`blog-max-claps-${window.location.href}`)
+        console.log(
+          localStorage.getItem(`blog-max-claps-${window.location.href}`)
+        );
+        console.log(
+          localStorage.getItem(`blog-max-claps-${window.location.href}`) ===
+            MAX_MULTI_CLAP
+        );
+        if (
+          localStorage.getItem(`blog-max-claps-${window.location.href}`) ===
+          MAX_MULTI_CLAP
+        ) {
           this.totalCountContainer.classList.remove("count-hidden");
           return;
         }
-        updateClaps(this.api, 1, this.url).then((updatedClapCount) => {
+        updateClaps(this.api, increment, this.url).then((updatedClapCount) => {
           if (updatedClapCount === this._cachedClapCount) {
             // if the clap number as not incremented, disable further updates
             this.classList.add("clap-limit-exceeded");
@@ -157,7 +187,6 @@ class ApplauseButton extends HTMLCustomElement {
           this._cachedClapCount = updatedClapCount;
           this.totalCountContainer.classList.remove("count-hidden");
           this._totalClaps += increment;
-          localStorage.setItem(`blog-claps-${window.location.href}`, 1);
           //this._bufferedClaps = 0;
         });
       }
@@ -167,11 +196,12 @@ class ApplauseButton extends HTMLCustomElement {
       if (event.button !== 0) {
         return;
       }
-
-      if (localStorage.getItem(`blog-claps-${window.location.href}`)) {
-        //this.totalCountContainer.classList.remove("count-hidden");
-        return;
-      }
+      this.classList.add("clapped");
+      toggleClass(this, "clap");
+      // if (localStorage.getItem(`blog-claps-${window.location.href}`)) {
+      //   //this.totalCountContainer.classList.remove("count-hidden");
+      //   return;
+      // }
       localStorage.setItem(`blog-liked-${window.location.href}`, "true");
 
       // if (this.classList.contains("clap-limit-exceeded")) {
@@ -187,12 +217,13 @@ class ApplauseButton extends HTMLCustomElement {
       //     ? this._cachedClapCount
       //     : 1
       //   : this._cachedClapCount + 1;
-      this.classList.add("clapped");
-      toggleClass(this, "clap");
+
       this.currentClap++;
       const clapCount = this.currentClap;
-
-      console.log("clapCount", clapCount);
+      if (this.currentClap <= MAX_MULTI_CLAP) {
+        localStorage.setItem(`blog-claps-${window.location.href}`, clapCount);
+        console.log("clapCount", clapCount);
+      }
       this.dispatchEvent(
         new CustomEvent("clapped", {
           bubbles: true,
@@ -212,7 +243,7 @@ class ApplauseButton extends HTMLCustomElement {
 
       // increment the clap count after a small pause (to allow the animation to run)
       setTimeout(() => {
-        this.totalCountElement.innerHTML = clapCount;
+        this.totalCountElement.innerHTML = Math.min(clapCount, MAX_MULTI_CLAP);
 
         this._countElement.innerHTML = formatClaps(this._bufferedClaps);
         setTimeout(() => {
