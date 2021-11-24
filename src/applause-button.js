@@ -16,14 +16,14 @@ const getClaps = (api, url) =>
 const updateClaps = (api, claps, url) => {
   console.log("hrer");
   return fetch(
-    `https://71ff-1-186-127-184.ngrok.io/appreceation/postAppreceation` +
+    `https://fc3c-1-186-127-184.ngrok.io/appreceation/postAppreceation` +
       (url ? `?url=${url}` : ""),
     {
       method: "POST",
       headers: {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(`${claps}`),
+      body: JSON.stringify({ claps }),
     }
   )
     .then((response) => response.text())
