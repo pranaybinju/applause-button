@@ -13,17 +13,23 @@ const getClaps = (api, url) =>
     .then((response) => response.text())
     .then((res) => Number(res));
 
-const updateClaps = (api, claps, url) =>
-  // TODO: polyfill for IE (not edge)
-  fetch(`${api}/update-claps` + (url ? `?url=${url}` : ""), {
-    method: "POST",
-    headers: {
-      "Content-Type": "text/plain",
-    },
-    body: JSON.stringify(`${claps},${VERSION}`),
-  })
+const updateClaps = (api, claps, url) => {
+  console.log("hrer");
+  return fetch(
+    `https://71ff-1-186-127-184.ngrok.io/appreceation/postAppreceation` +
+      (url ? `?url=${url}` : ""),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      body: JSON.stringify(`${claps}`),
+    }
+  )
     .then((response) => response.text())
     .then((res) => Number(res));
+};
+// TODO: polyfill for IE (not edge)
 
 const arrayOfSize = (size) => new Array(size).fill(undefined);
 
@@ -151,6 +157,7 @@ class ApplauseButton extends HTMLCustomElement {
           this._cachedClapCount = updatedClapCount;
           this.totalCountContainer.classList.remove("count-hidden");
           this._totalClaps += increment;
+          localStorage.setItem(`blog-claps-${window.location.href}`, 1);
           //this._bufferedClaps = 0;
         });
       }
@@ -160,8 +167,7 @@ class ApplauseButton extends HTMLCustomElement {
       if (event.button !== 0) {
         return;
       }
-      this.classList.add("clapped");
-      toggleClass(this, "clap");
+
       if (localStorage.getItem(`blog-claps-${window.location.href}`)) {
         //this.totalCountContainer.classList.remove("count-hidden");
         return;
@@ -181,10 +187,10 @@ class ApplauseButton extends HTMLCustomElement {
       //     ? this._cachedClapCount
       //     : 1
       //   : this._cachedClapCount + 1;
-
+      this.classList.add("clapped");
+      toggleClass(this, "clap");
       this.currentClap++;
       const clapCount = this.currentClap;
-      localStorage.setItem(`blog-claps-${window.location.href}`, clapCount);
 
       console.log("clapCount", clapCount);
       this.dispatchEvent(
