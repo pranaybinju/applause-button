@@ -3,20 +3,22 @@ import "document-register-element/build/document-register-element";
 const VERSION = "3.3.0";
 const API = "https://api.applause-button.com";
 
-const getClaps = (api, url) =>
-  // TODO: polyfill for IE (not edge)
-  fetch(`${api}/get-claps` + (url ? `?url=${url}` : ""), {
-    headers: {
-      "Content-Type": "text/plain",
-    },
-  })
+const getClaps = (api, url) => {
+  console.log("here");
+  return fetch(
+    `https://2058-1-186-126-186.ngrok.io/appreceation/getAppreceation` +
+      (url ? `?url=${url}` : "")
+  )
     .then((response) => response.text())
     .then((res) => Number(res));
+};
+// TODO: polyfill for IE (not edge)
+//  https://f308-1-186-126-186.ngrok.io/appreceation/getAppreceation?url=naasasaann.com
 
 const updateClaps = (api, claps, url) => {
   console.log("hrer");
   return fetch(
-    `http://fc3c-1-186-127-184.ngrok.io/appreceation/postAppreceation` +
+    `https://2058-1-186-126-186.ngrok.io/appreceation/postAppreceation` +
       (url ? `?url=${url}` : ""),
     {
       method: "POST",
