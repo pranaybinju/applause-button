@@ -264,30 +264,18 @@ class ApplauseButton extends HTMLCustomElement {
     getClaps(this.api, this.url).then((clapCount) => {
       this.classList.remove("loading");
       this._cachedClapCount = clapCount;
-      this.currentClap = localStorage.getItem(
-        `blog-claps-${window.location.href}`
-      )
-        ? localStorage.getItem(`blog-claps-${window.location.href}`)
-        : this._cachedClapCount;
+      this.currentClap = this._cachedClapCount;
       initialClapCountResolve(clapCount);
       var isLiked = localStorage.getItem(`blog-liked-${window.location.href}`);
 
       if (isLiked) {
         this.classList.add("clapped");
         this.classList.add("clap");
-        this.totalCountElement.innerHTML = localStorage.getItem(
-          `blog-claps-${window.location.href}`
-        )
-          ? localStorage.getItem(`blog-claps-${window.location.href}`)
-          : clapCount;
+        this.totalCountElement.innerHTML = clapCount;
         return;
       }
       if (clapCount > 0) {
-        this.totalCountElement.innerHTML = localStorage.getItem(
-          `blog-claps-${window.location.href}`
-        )
-          ? localStorage.getItem(`blog-claps-${window.location.href}`)
-          : clapCount;
+        this.totalCountElement.innerHTML = clapCount;
       }
     });
 
