@@ -4,9 +4,8 @@ const VERSION = "3.3.0";
 const API = "https://api.applause-button.com";
 
 const getClaps = (api, url) => {
-  console.log("here");
   return fetch(
-    `https://2058-1-186-126-186.ngrok.io/appreceation/getAppreceation` +
+    `https://f83a-1-186-124-5.ngrok.io/appreceation/getAppreceation` +
       (url ? `?url=${url}` : "")
   )
     .then((response) => response.text())
@@ -16,9 +15,10 @@ const getClaps = (api, url) => {
 //  https://f308-1-186-126-186.ngrok.io/appreceation/getAppreceation?url=naasasaann.com
 
 const updateClaps = (api, claps, url) => {
-  console.log("hrer");
+  // console.log("hrer");
+  console.log(url);
   return fetch(
-    `https://2058-1-186-126-186.ngrok.io/appreceation/postAppreceation` +
+    `https://f83a-1-186-124-5.ngrok.io/appreceation/postAppreceation` +
       (url ? `?url=${url}` : ""),
     {
       method: "POST",
@@ -98,11 +98,7 @@ class ApplauseButton extends HTMLCustomElement {
           </g>
         </svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 20 20">
-          <g class="sparkle">
-          ${arrayOfSize(5)
-            .map((s) => `<g><circle cx="0" cy="0" r="1"/></g>`)
-            .join("")}
-          </g>
+        
         </svg>
         <div class="total-count-container">
           <div class="total-count"></div>
@@ -116,7 +112,7 @@ class ApplauseButton extends HTMLCustomElement {
 
     this.countContainer = this.querySelector(".count-container");
     this.totalCountContainer = this.querySelector(".total-count-container");
-
+    //this.sparkleElem = this.querySelector(".sparkle");
     this._updateRootColor();
     // the number of claps that this user has made - this is limited
     // by the MAX_MULTI_CLAP property, and whether multiclap is enabled
@@ -160,6 +156,7 @@ class ApplauseButton extends HTMLCustomElement {
           this.totalCountContainer.classList.remove("count-hidden");
           this._totalClaps += increment;
           localStorage.setItem(`blog-claps-${window.location.href}`, 1);
+          // this.sparkleElem.classList.add("hide-sparkle");
           //this._bufferedClaps = 0;
         });
       }
@@ -233,6 +230,7 @@ class ApplauseButton extends HTMLCustomElement {
     });
 
     getClaps(this.api, this.url).then((clapCount) => {
+      console.log(this.url);
       this.classList.remove("loading");
       this._cachedClapCount = clapCount;
       this.currentClap = this._cachedClapCount;
