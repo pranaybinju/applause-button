@@ -40,7 +40,6 @@ applause-button {
   }
 
   &.loading {
-    opacity: 0.5;
   }
 
   .shockwave {
@@ -51,7 +50,7 @@ applause-button {
   svg {
     @include centered-square(60%);
     @include position-fill();
-    opacity: 0.8;
+    opacity: 1;
     stroke: none;
     // annoyingly bootstrap has a higher precedence rule that sets overflow to hidden
     // hence the bang-important
