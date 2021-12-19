@@ -83,12 +83,51 @@ applause-button {
     }
   }
 
-  .count-container {
+  .count-container-top {
     position: absolute;
     top: -40%;
     width: 100%;
     color: gray;
     user-select: none;
+
+    .count {
+      text-align: center;
+    }
+  }
+
+  .count-container-right {
+    position: absolute;
+    left: 85%;
+    width: 100%;
+    color: gray;
+    user-select: none;
+    top: 30%;
+
+    .count {
+      text-align: center;
+    }
+  }
+
+  .count-container-left {
+    position: absolute;
+    right: 85%;
+    width: 100%;
+    color: gray;
+    user-select: none;
+    bottom: -30%;
+
+    .count {
+      text-align: center;
+    }
+  }
+
+  .count-container-bottom {
+    position: absolute;
+
+    width: 100%;
+    color: gray;
+    user-select: none;
+    top: 30%;
 
     .count {
       text-align: center;
