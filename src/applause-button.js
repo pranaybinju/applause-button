@@ -69,10 +69,10 @@ class ApplauseButton extends HTMLCustomElement {
     switch (type) {
       case "heart":
         svgIconVal = `
-      <g class="flat" style="fill:red;">
+      <g class="flat" style="fill:rgb(253, 95, 97);">
       <path d="m55.1 5.4c-6.3-6.3-16.6-6.3-23 0l-1.8 1.8-1.8-1.8c-6.2-6.5-16.4-6.8-23-.7s-6.8 16.4-.7 23c.2.2.4.5.7.7l23.7 23.7c.3.3.7.4 1.1.4s.8-.1 1-.4l23.7-23.7c6.4-6.3 6.4-16.6.1-23z"></path>
       </g>
-      <g class="outline" style="stroke:red;">
+      <g class="outline" style="stroke:rgb(253, 95, 97);">
       <path d="m55.1 5.4c-6.3-6.3-16.6-6.3-23 0l-1.8 1.8-1.8-1.8c-6.2-6.5-16.4-6.8-23-.7s-6.8 16.4-.7 23c.2.2.4.5.7.7l23.7 23.7c.3.3.7.4 1.1.4s.8-.1 1-.4l23.7-23.7c6.4-6.3 6.4-16.6.1-23zm-2 21.1-.2-.2-22.6 22.6-22.7-22.6c-5.3-5-5.5-13.4-.5-18.8s13.4-5.6 18.8-.6c.1.3.3.4.5.6l2.9 2.8c.6.6 1.5.6 2.1 0l2.8-2.8c5.3-5.1 13.7-5 18.8.3 5 5.2 5 13.4 0 18.5z"></path>
       </g>
   `;
@@ -278,7 +278,7 @@ class ApplauseButton extends HTMLCustomElement {
     if (!this._styleRootElement) {
       return;
     }
-    const rootColor = this.getAttribute("color") || "green";
+    const rootColor = this.getAttribute("color");
     const style = this._styleRootElement.style;
     style.fill = rootColor;
     style.stroke = rootColor;
